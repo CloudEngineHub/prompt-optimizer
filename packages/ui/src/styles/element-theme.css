@@ -1,0 +1,270 @@
+/**
+ * Element Plus 主题变量与全局样式
+ * 集中管理Element组件的主题样式，与现有主题系统集成
+ */
+
+:root {
+  /* 基础主题变量映射到Element Plus */
+  --el-color-primary: var(--primary-color, #8a2be2);
+  --el-color-primary-light-3: var(--primary-light, rgba(138, 43, 226, 0.7));
+  --el-color-primary-light-5: var(--primary-lighter, rgba(138, 43, 226, 0.5));
+  --el-color-primary-light-7: var(--primary-lightest, rgba(138, 43, 226, 0.3));
+  --el-color-primary-light-9: var(--primary-lightest, rgba(138, 43, 226, 0.1));
+  
+  /* 背景色变量 */
+  --el-bg-color: var(--bg-normal, transparent);
+  --el-bg-color-overlay: var(--bg-dropdown, #2a2a2a);
+  --el-bg-color-secondary: var(--bg-secondary, rgba(0, 0, 0, 0.1));
+  
+  /* 文本颜色变量 */
+  --el-text-color-primary: var(--text-normal, #fff);
+  --el-text-color-regular: var(--text-secondary, #aaa);
+  --el-text-color-secondary: var(--text-secondary, #aaa);
+  --el-text-color-placeholder: var(--text-placeholder, rgba(255, 255, 255, 0.5));
+  --el-text-color-disabled: var(--text-disabled, rgba(255, 255, 255, 0.3));
+  
+  /* 边框颜色变量 */
+  --el-border-color: var(--border-normal, rgba(255, 255, 255, 0.1));
+  --el-border-color-light: var(--border-light, rgba(255, 255, 255, 0.05));
+  --el-border-color-lighter: var(--border-lighter, rgba(255, 255, 255, 0.03));
+  --el-border-color-extra-light: var(--border-lightest, rgba(255, 255, 255, 0.02));
+  
+  /* 填充色变量 */
+  --el-fill-color: var(--bg-selected, rgba(138, 43, 226, 0.2));
+  --el-fill-color-light: var(--bg-hover, rgba(255, 255, 255, 0.1));
+  --el-fill-color-blank: var(--bg-dropdown, #2a2a2a);
+  
+  /* 其他变量 */
+  --el-mask-color: var(--bg-mask, rgba(0, 0, 0, 0.5));
+  --el-box-shadow: var(--shadow-normal, 0 4px 12px rgba(0, 0, 0, 0.2));
+}
+
+/* 下拉菜单全局样式 */
+.el-select-dropdown {
+  background-color: var(--el-bg-color-overlay) !important;
+  border: 1px solid var(--el-border-color) !important;
+  border-radius: 0.5rem !important;
+  box-shadow: var(--el-box-shadow) !important;
+  color: var(--el-text-color-primary) !important;
+  margin-top: 4px !important;
+  padding: 6px 0 !important;
+}
+
+.el-select-dropdown__item {
+  color: var(--el-text-color-primary) !important;
+  font-size: 0.875rem !important;
+  padding: 8px 12px !important;
+  margin: 0 4px !important;
+  border-radius: 4px !important;
+  transition: all 0.15s ease-in-out !important;
+  font-weight: normal !important;
+}
+
+.el-select-dropdown__item:hover {
+  background-color: var(--el-fill-color-light) !important;
+  color: var(--el-color-primary) !important;
+}
+
+.el-select-dropdown__item.selected {
+  background-color: var(--el-fill-color) !important;
+  color: var(--el-color-primary) !important;
+  font-weight: bold !important;
+}
+
+/* 设置下拉菜单容器样式 */
+.el-select-dropdown__wrap {
+  background-color: var(--el-bg-color-overlay) !important;
+  max-height: 280px !important;
+}
+
+.el-scrollbar__view {
+  background-color: transparent !important;
+}
+
+/* 输入框全局样式 */
+.el-input__wrapper {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+.el-input__inner {
+  background-color: transparent !important;
+  color: var(--el-text-color-primary) !important;
+  height: auto !important;
+  line-height: 1.5 !important;
+  padding: 0.5rem 0.75rem !important;
+  font-weight: normal !important;
+  opacity: 1 !important;
+}
+
+/* 选择器样式优化 */
+.el-select .el-select__wrapper {
+  background-color: transparent !important;
+  padding: 0 !important;
+}
+
+.el-select .el-input__wrapper {
+  padding: 0 !important;
+  background-color: transparent !important;
+}
+
+.el-select .el-input.is-focus .el-input__wrapper {
+  box-shadow: none !important;
+}
+
+.el-select .el-select__caret {
+  color: var(--el-text-color-secondary) !important;
+  font-size: 16px !important;
+  transition: transform 0.3s !important;
+}
+
+.el-select .el-select__caret.is-reverse {
+  transform: rotate(180deg) !important;
+}
+
+/* 选择器输入状态 */
+.el-select-dropdown__item.hover {
+  background-color: var(--el-fill-color-light) !important;
+  color: var(--el-color-primary) !important;
+}
+
+.el-select .el-select__input {
+  color: var(--el-text-color-primary) !important;
+  font-size: 0.875rem !important;
+  font-weight: normal !important;
+  background-color: transparent !important;
+  margin-left: 8px !important;
+  height: 28px !important;
+  line-height: 28px !important;
+  opacity: 1 !important;
+}
+
+/* 密码输入框图标样式 */
+.el-input__suffix {
+  color: var(--el-text-color-placeholder) !important;
+  transition: color 0.2s ease !important;
+}
+
+.el-input__suffix:hover {
+  color: var(--el-color-primary) !important;
+}
+
+/* 弹出层箭头样式 */
+.el-popper__arrow::before {
+  background-color: var(--el-bg-color-overlay) !important;
+  border-color: var(--el-border-color) !important;
+}
+
+/* 标签样式 */
+.el-tag {
+  background-color: var(--el-fill-color) !important;
+  color: var(--el-color-primary) !important;
+  border-color: var(--el-border-color) !important;
+  border-radius: 4px !important;
+  padding: 0 8px !important;
+  height: 24px !important;
+  line-height: 22px !important;
+}
+
+.el-tag .el-tag__close {
+  color: var(--el-color-primary) !important;
+  font-weight: bold !important;
+}
+
+.el-tag .el-tag__close:hover {
+  background-color: var(--el-color-primary) !important;
+  color: white !important;
+}
+
+/* 表单控件外观统一 */
+.el-input-group__prepend,
+.el-input-group__append {
+  background-color: var(--bg-secondary, rgba(0, 0, 0, 0.1)) !important;
+  color: var(--text-secondary, #aaa) !important;
+  border-color: var(--border-normal, rgba(255, 255, 255, 0.1)) !important;
+}
+
+/* 禁用状态样式 */
+.el-input.is-disabled .el-input__wrapper {
+  background-color: var(--bg-input, rgba(0, 0, 0, 0.1)) !important;
+  opacity: 0.7 !important;
+}
+
+.el-input.is-disabled .el-input__inner {
+  color: var(--text-disabled, rgba(255, 255, 255, 0.3)) !important;
+}
+
+/* 选择器多选标签容器样式 */
+.el-select .el-select__tags {
+  padding-left: 6px !important;
+  padding-top: 3px !important;
+}
+
+/* 输入光标颜色 */
+.el-input__inner::selection,
+.el-select__input::selection {
+  background: var(--el-color-primary-light-7) !important;
+  color: white !important;
+}
+
+.el-input__inner:focus,
+.el-select__input:focus {
+  color: var(--el-text-color-primary) !important;
+  caret-color: var(--el-color-primary) !important;
+}
+
+/* 创建新选项样式 */
+.el-select-dropdown__item.is-created {
+  color: var(--el-color-primary) !important;
+}
+
+.el-select-dropdown__item.is-created::before {
+  content: "新增: ";
+  color: var(--el-color-primary-light-3) !important;
+  margin-right: 4px;
+}
+
+/* 暗色主题强制样式 */
+html[data-theme='dark'] .el-select-dropdown,
+html[data-theme='dark'] .el-popper {
+  background-color: var(--el-bg-color-overlay) !important;
+  color: var(--el-text-color-primary) !important;
+  border-color: var(--el-border-color) !important;
+}
+
+/* 紫色主题特别适配 */
+html[data-theme='purple'] .el-select-dropdown,
+html[data-theme='purple'] .el-popper {
+  background-color: var(--bg-dropdown, #2a2a2a) !important;
+  border-color: var(--border-dropdown, rgba(255, 255, 255, 0.1)) !important;
+}
+
+html[data-theme='purple'] .el-select-dropdown__item.selected {
+  background-color: var(--bg-selected, rgba(138, 43, 226, 0.2)) !important;
+  color: var(--text-highlight, #bf7af0) !important;
+}
+
+/* 绿色主题特别适配 */
+html[data-theme='green'] .el-select-dropdown,
+html[data-theme='green'] .el-popper {
+  background-color: var(--bg-dropdown, #2a2a2a) !important;
+  border-color: var(--border-dropdown, rgba(255, 255, 255, 0.1)) !important;
+}
+
+html[data-theme='green'] .el-select-dropdown__item.selected {
+  background-color: var(--bg-selected, rgba(138, 43, 226, 0.2)) !important;
+  color: var(--text-highlight, #bf7af0) !important;
+}
+
+/* 蓝色主题特别适配 */
+html[data-theme='blue'] .el-select-dropdown,
+html[data-theme='blue'] .el-popper {
+  background-color: var(--bg-dropdown, #2a2a2a) !important;
+  border-color: var(--border-dropdown, rgba(255, 255, 255, 0.1)) !important;
+}
+
+html[data-theme='blue'] .el-select-dropdown__item.selected {
+  background-color: var(--bg-selected, rgba(138, 43, 226, 0.2)) !important;
+  color: var(--text-highlight, #bf7af0) !important;
+} 

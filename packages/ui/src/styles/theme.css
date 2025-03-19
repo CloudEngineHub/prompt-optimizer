@@ -11,26 +11,181 @@ html {
 /* 全局背景设置 */
 :root {
   @apply bg-stone-100 text-black;
+
+  /* Element Plus通用主题变量 */
+  --primary-color: #8a2be2;
+  --primary-light: rgba(138, 43, 226, 0.7);
+  --primary-lighter: rgba(138, 43, 226, 0.5);
+  --primary-lightest: rgba(138, 43, 226, 0.3);
+  
+  /* 背景相关变量 */
+  --bg-normal: #ffffff;
+  --bg-secondary: #f9f9f9;
+  --bg-dropdown: #ffffff;
+  --bg-hover: rgba(0, 0, 0, 0.05);
+  --bg-selected: rgba(138, 43, 226, 0.1);
+  --bg-input: #f5f5f5;
+  --bg-input-focus: #f0f0f0;
+  --bg-mask: rgba(0, 0, 0, 0.4);
+  
+  /* 文本相关变量 */
+  --text-normal: #333333;
+  --text-secondary: #666666;
+  --text-placeholder: #999999;
+  --text-disabled: #cccccc;
+  --text-highlight: #8a2be2;
+  
+  /* 边框相关变量 */
+  --border-normal: #e0e0e0;
+  --border-light: #eeeeee;
+  --border-lighter: #f5f5f5;
+  --border-lightest: #fafafa;
+  --border-dropdown: #e0e0e0;
+  --border-input: #e0e0e0;
+  --border-input-focus: #8a2be2;
+  --border-selected: rgba(138, 43, 226, 0.3);
+  
+  /* 阴影 */
+  --shadow-normal: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 /* 暗色模式背景 */
 :root.dark {
   @apply bg-slate-950 text-slate-100;
+  
+  /* 暗色主题变量 */
+  --primary-color: #9d4edd;
+  --primary-light: rgba(157, 78, 221, 0.7);
+  --primary-lighter: rgba(157, 78, 221, 0.5);
+  --primary-lightest: rgba(157, 78, 221, 0.3);
+  
+  /* 背景相关变量 */
+  --bg-normal: #1a1a1a;
+  --bg-secondary: #2a2a2a;
+  --bg-dropdown: #2a2a2a;
+  --bg-hover: rgba(255, 255, 255, 0.1);
+  --bg-selected: rgba(157, 78, 221, 0.2);
+  --bg-input: rgba(0, 0, 0, 0.2);
+  --bg-input-focus: rgba(0, 0, 0, 0.3);
+  --bg-mask: rgba(0, 0, 0, 0.6);
+  
+  /* 文本相关变量 */
+  --text-normal: #ffffff;
+  --text-secondary: #aaaaaa;
+  --text-placeholder: rgba(255, 255, 255, 0.5);
+  --text-disabled: rgba(255, 255, 255, 0.3);
+  --text-highlight: #bf7af0;
+  
+  /* 边框相关变量 */
+  --border-normal: rgba(255, 255, 255, 0.1);
+  --border-light: rgba(255, 255, 255, 0.05);
+  --border-lighter: rgba(255, 255, 255, 0.03);
+  --border-lightest: rgba(255, 255, 255, 0.02);
+  --border-dropdown: rgba(255, 255, 255, 0.1);
+  --border-input: rgba(255, 255, 255, 0.1);
+  --border-input-focus: rgba(157, 78, 221, 0.5);
+  --border-selected: rgba(157, 78, 221, 0.3);
+  
+  /* 阴影 */
+  --shadow-normal: 0 2px 12px rgba(0, 0, 0, 0.4);
+  --shadow-dropdown: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-card: 0 4px 8px rgba(0, 0, 0, 0.25);
+  
+  /* 状态颜色 */
+  --color-success: #67c23a;
+  --color-warning: #e6a23c;
+  --color-danger: #f56c6c;
+  --color-info: #909399;
 }
 
 /* 蓝色主题背景 */
 :root.theme-blue {
   @apply bg-sky-100 text-sky-950;
+  
+  /* 蓝色主题变量 */
+  --primary-color: #0ea5e9;
+  
+  /* 背景相关变量 */
+  --bg-normal: #f0f9ff;
+  --bg-secondary: #e0f2fe;
+  --bg-dropdown: #ffffff;
+  --bg-hover: rgba(14, 165, 233, 0.1);
+  --bg-selected: rgba(14, 165, 233, 0.2);
+  --bg-input: #f0f9ff;
+  --bg-input-focus: #e0f2fe;
+  
+  /* 文本相关变量 */
+  --text-normal: #0c4a6e;
+  --text-secondary: #0369a1;
+  --text-placeholder: #7dd3fc;
+  --text-highlight: #0ea5e9;
+  
+  /* 边框相关变量 */
+  --border-normal: #bae6fd;
+  --border-dropdown: #bae6fd;
+  --border-input: #bae6fd;
+  --border-input-focus: #0ea5e9;
+  --border-selected: rgba(14, 165, 233, 0.4);
 }
 
 /* 绿色主题背景 */
 :root.theme-green {
   @apply bg-teal-950 text-teal-900;
+  
+  /* 绿色主题变量 */
+  --primary-color: #2dd4bf;
+  
+  /* 背景相关变量 */
+  --bg-normal: #0f766e;
+  --bg-secondary: #115e59;
+  --bg-dropdown: #134e4a;
+  --bg-hover: rgba(45, 212, 191, 0.15);
+  --bg-selected: rgba(45, 212, 191, 0.25);
+  --bg-input: rgba(0, 0, 0, 0.2);
+  --bg-input-focus: rgba(0, 0, 0, 0.3);
+  
+  /* 文本相关变量 */
+  --text-normal: #ccfbf1;
+  --text-secondary: #99f6e4;
+  --text-placeholder: #5eead4;
+  --text-highlight: #2dd4bf;
+  
+  /* 边框相关变量 */
+  --border-normal: #14b8a6;
+  --border-dropdown: rgba(20, 184, 166, 0.5);
+  --border-input: rgba(20, 184, 166, 0.5);
+  --border-input-focus: #2dd4bf;
+  --border-selected: rgba(45, 212, 191, 0.5);
 }
 
 /* 暗紫模式背景 */
 :root.theme-purple {
   @apply bg-purple-900 bg-gradient-to-br from-purple-900 to-purple-950 text-white;
+  
+  /* 紫色主题变量 */
+  --primary-color: #c084fc;
+  
+  /* 背景相关变量 */
+  --bg-normal: #581c87;
+  --bg-secondary: #4c1d95;
+  --bg-dropdown: #3b0764;
+  --bg-hover: rgba(192, 132, 252, 0.15);
+  --bg-selected: rgba(192, 132, 252, 0.25);
+  --bg-input: rgba(0, 0, 0, 0.2);
+  --bg-input-focus: rgba(0, 0, 0, 0.3);
+  
+  /* 文本相关变量 */
+  --text-normal: #ffffff;
+  --text-secondary: #e9d5ff;
+  --text-placeholder: #d8b4fe;
+  --text-highlight: #c084fc;
+  
+  /* 边框相关变量 */
+  --border-normal: #8b5cf6;
+  --border-dropdown: rgba(139, 92, 246, 0.5);
+  --border-input: rgba(139, 92, 246, 0.5);
+  --border-input-focus: #c084fc;
+  --border-selected: rgba(192, 132, 252, 0.5);
 }
 
 /* 移除 body 的背景样式，改为继承 */
@@ -488,15 +643,15 @@ html * {
   }
 
   .theme-markdown-content table th {
-    @apply bg-stone-100 text-stone-700 border border-stone-300 font-semibold;
+    @apply bg-sky-100 text-sky-800 border border-sky-300;
   }
 
   .theme-markdown-content table td {
-    @apply border border-stone-200 text-stone-600;
+    @apply border border-sky-200 text-sky-700;
   }
 
   .theme-markdown-content table tr:nth-child(even) {
-    @apply bg-stone-100/60;
+    @apply bg-sky-100/50;
   }
 
   .theme-markdown-content hr {
@@ -826,9 +981,7 @@ html * {
 
   /* 管理界面按钮 - 警告（禁用） */
   .theme-manager-button-warning {
-    @apply
-         bg-gray-300 
-         hover:bg-gray-400;
+    @apply bg-slate-500 hover:bg-slate-400;
   }
 
   /* 管理界面按钮 - 危险（删除） */
@@ -897,7 +1050,7 @@ html * {
   }
   
   .theme-markdown-content table th {
-    @apply bg-sky-100 text-sky-800 border border-sky-300;
+    @apply bg-sky-800 text-sky-800 border border-sky-300;
   }
   
   .theme-markdown-content table td {
@@ -1135,15 +1288,29 @@ html * {
 
   /* 管理界面按钮 - 警告（禁用） */
   .theme-manager-button-warning {
-    @apply bg-slate-500 hover:bg-slate-400;
+    @apply bg-gray-500 hover:bg-gray-400/80 text-white;
   }
 
   /* 管理界面按钮 - 危险（删除） */
   .theme-manager-button-danger {
-    @apply bg-red-300/80 hover:bg-red-500/80 
-    text-red-900 hover:text-white 
-    transition-colors;
+    @apply bg-red-700/60 hover:bg-red-600/60 text-white;
   }
+
+  /* 管理界面文本 - 主要 */
+  .theme-manager-text {
+    @apply text-white/90;
+  }
+
+  /* 管理界面文本 - 次要 */
+  .theme-manager-text-secondary {
+    @apply text-white/70;
+  }
+
+  /* 管理界面文本 - 禁用 */
+  .theme-manager-text-disabled {
+    @apply text-white/40;
+  }
+
   /* 绿色主题的 Markdown 样式 */
   .theme-markdown-content {
     @apply text-teal-200;
@@ -1192,8 +1359,8 @@ html * {
     @apply border border-teal-700 text-teal-300;
   }
   
-  .theme-markdown-content tr:nth-child(even) {
-    @apply bg-teal-700/50;
+  .theme-markdown-content table tr:nth-child(even) {
+    @apply bg-teal-700/70;
   }
   
   .theme-markdown-content hr {
@@ -1205,7 +1372,7 @@ html * {
   }
   
   .theme-markdown-content strong {
-    @apply text-teal-100;
+    @apply text-white;
   }
   .markdown-think summary::before {
     @apply border-teal-200;
@@ -1340,7 +1507,7 @@ html * {
     @apply border-purple-600/20 hover:bg-purple-800/50 text-gray-300;
   }
   .theme-dropdown-item-tag {
-    @apply bg-stone-500/80  text-white;
+    @apply bg-slate-400/80 text-white;
   }
 
   /* 下拉菜单分组 */
@@ -1533,15 +1700,15 @@ html * {
   }
   
   .theme-markdown-content table th {
-    @apply bg-purple-800/50 text-white border border-purple-600/50;
+    @apply bg-slate-700/70 text-slate-200 border border-slate-700;
   }
   
   .theme-markdown-content table td {
-    @apply border border-purple-700/50 text-white/90;
+    @apply border border-slate-700 text-slate-300;
   }
   
   .theme-markdown-content table tr:nth-child(even) {
-    @apply bg-purple-700/30;
+    @apply bg-slate-700/70;
   }
   
   .theme-markdown-content hr {
@@ -1826,7 +1993,7 @@ html * {
   }
   
   .theme-markdown-content table th {
-    @apply bg-slate-700/70 text-slate-200 border border-slate-700;
+    @apply bg-slate-800 text-slate-200 border border-slate-600;
   }
   
   .theme-markdown-content table td {

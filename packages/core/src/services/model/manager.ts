@@ -105,8 +105,8 @@ export class ModelManager implements IModelManager {
     if (
       config.name !== undefined ||
       config.baseURL !== undefined ||
+      config.defaultModel !== undefined || 
       config.models !== undefined ||
-      config.defaultModel !== undefined ||
       config.apiKey !== undefined ||
       config.enabled
     ) {
@@ -118,37 +118,52 @@ export class ModelManager implements IModelManager {
   }
 
   /**
- * 获取指定模型的可用模型列表
- * 
- * 该方法通过LLM服务API获取指定模型提供商支持的所有模型列表。
- * 支持OpenAI兼容协议的API（包括本地Ollama）以及Gemini等其他提供商。
- */
-  async fetchModelsList(key: string, llmServiceFactory?: (manager: IModelManager) => any): Promise<string[]> {
-    // 检查模型配置是否存在
-    const model = this.getModel(key);
-    if (!model) {
-      throw new ModelConfigError(`模型 ${key} 不存在`);
+   * 使用临时配置获取模型列表
+   * 
+   * 该方法允许使用临时配置获取模型列表，而不会修改存储的配置。
+   * 适用于在用户编辑模型配置时预览和获取可用模型，或测试新的API连接。
+   * 
+   * @param baseConfig 基础配置或模型key
+   * @param tempConfig 临时配置，会覆盖基础配置中的同名属性
+   * @param llmServiceFactory LLM服务工厂函数
+   * @returns 可用模型列表
+   */
+  async fetchModelsListWithConfig(baseConfig: string | ModelConfig, tempConfig: Partial<ModelConfig> = {}, llmServiceFactory?: (manager: IModelManager) => any): Promise<string[]> {
+    let baseModelConfig: ModelConfig;
+    
+    // 如果baseConfig是字符串，则视为模型key，获取对应的配置
+    if (typeof baseConfig === 'string') {
+      const model = this.getModel(baseConfig);
+      if (!model) {
+        throw new ModelConfigError(`模型 ${baseConfig} 不存在`);
+      }
+      baseModelConfig = model;
+    } else {
+      baseModelConfig = baseConfig;
     }
-
+    
+    // 合并配置
+    const mergedConfig = {
+      ...baseModelConfig,
+      ...tempConfig
+    };
+    
     // 验证基本配置
-    if (!model.baseURL || !model.apiKey) {
+    if (!mergedConfig.baseURL || !mergedConfig.apiKey) {
       throw new ModelConfigError('获取模型列表需要有效的API地址和密钥');
     }
-
-    // 使用提供的工厂函数或导入默认的LLM服务
-    // 注意：这里使用工厂函数模式避免循环依赖
+    
+    // 创建LLM服务
     let llmService;
     if (llmServiceFactory) {
       llmService = llmServiceFactory(this);
     } else {
-      // 如果没有提供工厂函数，则尝试导入LLM服务
-      // 注意：这种方式可能导致循环依赖，应在实际使用时通过工厂函数解决
       const { createLLMService } = require('../llm/service');
       llmService = createLLMService(this);
     }
-
-    // 调用LLM服务的fetchAvailableModels方法获取模型列表
-    return await llmService.fetchAvailableModels(key);
+    
+    // 直接使用合并的配置获取模型列表
+    return await llmService.fetchAvailableModels(mergedConfig);
   }
 
   /**

@@ -437,21 +437,26 @@ export class LLMService implements ILLMService {
     }
   }
 
-  async fetchAvailableModels(provider: string): Promise<string[]> {
+  async fetchAvailableModels(config: ModelConfig): Promise<string[]> {
     try {
-      const modelConfig = this.modelManager.getModel(provider);
-      if (!modelConfig) {
-        throw new RequestConfigError(`模型 ${provider} 不存在`);
+      if (!config) {
+        throw new RequestConfigError(`模型配置不能为空`);
       }
 
-      this.validateModelConfig(modelConfig);
+      // 验证基本配置，但不检查enabled状态
+      if (!config.baseURL) {
+        throw new RequestConfigError('API地址不能为空');
+      }
+      if (!config.apiKey) {
+        throw new RequestConfigError('API密钥不能为空');
+      }
 
       // 根据不同提供商实现不同的获取模型列表逻辑
-      if (modelConfig.provider === 'gemini') {
-        return this.fetchGeminiModels(modelConfig);
+      if (config.provider === 'gemini') {
+        return this.fetchGeminiModels(config);
       } else {
         // OpenAI兼容格式的API，包括DeepSeek、自定义模型和Ollama
-        return this.fetchOpenAICompatibleModels(modelConfig);
+        return this.fetchOpenAICompatibleModels(config);
       }
     } catch (error: any) {
       if (error instanceof RequestConfigError || error instanceof APIError) {

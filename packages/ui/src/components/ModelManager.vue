@@ -109,13 +109,22 @@
                   <div>
                     <label class="block text-sm font-medium theme-manager-text mb-1.5">{{ t('modelManager.defaultModel') }}</label>
                     <div class="flex items-center gap-2">
-                      <select v-model="editingModel.defaultModel" required
-                            class="theme-manager-input flex-grow"
-                            :disabled="isLoadingModels">
-                        <option v-for="model in availableModels" :key="model" :value="model">
-                          {{ model }}
-                        </option>
-                      </select>
+                      <ElSelect
+                        v-model="editingModel.defaultModel"
+                        filterable
+                        allow-create
+                        default-first-option
+                        create-item-position="top"
+                        class="flex-grow el-themed-select"
+                        popper-class="el-themed-dropdown"
+                        :placeholder="t('modelManager.defaultModelPlaceholder', '输入或选择模型名称')"
+                        :disabled="isLoadingModels">
+                        <ElOption
+                          v-for="model in availableModels"
+                          :key="model"
+                          :label="model"
+                          :value="model" />
+                      </ElSelect>
                       <button @click="fetchModels(editingModel.key)" 
                               type="button"
                               :disabled="isLoadingModels || !editingModel.apiKey || !editingModel.baseURL"
@@ -126,9 +135,13 @@
                   </div>
                   <div>
                     <label class="block text-sm font-medium theme-manager-text mb-1.5">{{ t('modelManager.apiKey') }}</label>
-                    <input v-model="editingModel.apiKey" type="password"
-                      class="theme-manager-input"
-                      :placeholder="t('modelManager.apiKeyPlaceholder')" />
+                    <ElInput
+                      v-model="editingModel.apiKey"
+                      type="password"
+                      show-password
+                      class="el-themed-input w-full"
+                      :placeholder="t('modelManager.apiKeyPlaceholder')">
+                    </ElInput>
                   </div>
                   <div v-if="vercelProxyAvailable" class="flex items-center space-x-2">
                     <input 
@@ -194,13 +207,22 @@
                   <div>
                     <label class="block text-sm font-medium theme-manager-text mb-1.5">{{ t('modelManager.defaultModel') }}</label>
                     <div class="flex items-center gap-2">
-                      <select v-model="newModel.defaultModel" required
-                            class="theme-manager-input flex-grow"
-                            :disabled="isLoadingModels">
-                        <option v-for="model in newModelAvailableModels" :key="model" :value="model">
-                          {{ model }}
-                        </option>
-                      </select>
+                      <ElSelect
+                        v-model="newModel.defaultModel"
+                        filterable
+                        allow-create
+                        default-first-option
+                        create-item-position="top"
+                        class="flex-grow el-themed-select"
+                        popper-class="el-themed-dropdown"
+                        :placeholder="t('modelManager.defaultModelPlaceholder', '输入或选择模型名称')"
+                        :disabled="isLoadingModels">
+                        <ElOption
+                          v-for="model in newModelAvailableModels"
+                          :key="model"
+                          :label="model"
+                          :value="model" />
+                      </ElSelect>
                       <button @click="fetchNewModels()" 
                               type="button"
                               :disabled="isLoadingModels || !newModel.apiKey || !newModel.baseURL"
@@ -211,9 +233,14 @@
                   </div>
                   <div>
                     <label class="block text-sm font-medium theme-manager-text mb-1.5">{{ t('modelManager.apiKey') }}</label>
-                    <input v-model="newModel.apiKey" type="password" required
-                           class="theme-manager-input"
-                           :placeholder="t('modelManager.apiKeyPlaceholder')" />
+                    <ElInput
+                      v-model="newModel.apiKey"
+                      type="password"
+                      show-password
+                      required
+                      class="el-themed-input w-full"
+                      :placeholder="t('modelManager.apiKeyPlaceholder')">
+                    </ElInput>
                   </div>
                   <div v-if="vercelProxyAvailable" class="flex items-center space-x-2">
                     <input 
@@ -257,6 +284,7 @@ import { ref, onMounted, defineEmits, watch } from 'vue';
 import { useI18n } from 'vue-i18n'
 import { modelManager, createLLMService, checkVercelApiAvailability, resetVercelStatusCache } from '@prompt-optimizer/core';
 import { useToast } from '../composables/useToast';
+import { ElInput, ElSelect, ElOption } from 'element-plus';
 
 const { t } = useI18n()
 const toast = useToast();
@@ -363,34 +391,14 @@ const handleDelete = async (key) => {
 const editModel = (key) => {
   const model = modelManager.getModel(key);
   if (model) {
-    // 为API密钥创建加密显示文本
-    let maskedApiKey = '';
-    if (model.apiKey) {
-      // 显示密钥的前四位和后四位，中间用星号代替
-      const keyLength = model.apiKey.length;
-      if (keyLength <= 8) {
-        // 如果密钥很短，就只显示全星号
-        maskedApiKey = '********';
-      } else {
-        // 显示前四位和后四位，中间用星号代替
-        const visiblePart = 4; // 前后各显示的字符数
-        const prefix = model.apiKey.substring(0, visiblePart);
-        const suffix = model.apiKey.substring(keyLength - visiblePart);
-        const maskedLength = keyLength - (visiblePart * 2);
-        const maskedPart = '*'.repeat(Math.min(maskedLength, 8)); // 不要太多星号
-        maskedApiKey = `${prefix}${maskedPart}${suffix}`;
-      }
-    }
-
     editingModel.value = {
       key,
       name: model.name,
       baseURL: model.baseURL,
       defaultModel: model.defaultModel,
-      apiKey: maskedApiKey, // 显示加密的API密钥
-      originalApiKey: model.apiKey, // 保存原始API密钥
+      apiKey: model.apiKey, // 直接使用原始密钥
       useVercelProxy: model.useVercelProxy,
-      hasApiKey: !!model.apiKey // 标记是否有API密钥
+      provider: model.provider
     };
     isEditing.value = true;
   }
@@ -406,20 +414,11 @@ const cancelEdit = () => {
 // 保存编辑
 const saveEdit = async () => {
   console.log('开始保存编辑...');
-  console.log('编辑的模型数据:', editingModel.value);
   
   try {
     const originalConfig = modelManager.getModel(editingModel.value.key)
     if (!originalConfig) {
       throw new Error('找不到原始配置')
-    }
-    console.log('原始配置:', originalConfig);
-
-    // 检查API密钥是否是掩码格式
-    let apiKey = editingModel.value.apiKey;
-    if (apiKey && apiKey.includes('*')) {
-      // 如果包含星号，说明用户没有修改密钥，使用原始密钥
-      apiKey = editingModel.value.originalApiKey;
     }
 
     const config = {
@@ -432,14 +431,12 @@ const saveEdit = async () => {
       provider: originalConfig.provider,
       useVercelProxy: editingModel.value.useVercelProxy
     }
-    console.log('新配置:', config);
 
     modelManager.updateModel(editingModel.value.key, config)
     
     loadModels()
     
     emit('modelsUpdated', editingModel.value.key)
-    console.log('已触发 modelsUpdated 事件');
     
     isEditing.value = false
     editingModel.value = null
@@ -520,124 +517,87 @@ const availableModels = ref([]);
 const newModelAvailableModels = ref(['default-model']);  // 默认至少有一个选项
 const isLoadingModels = ref(false);
 
-// 获取编辑中模型的可用模型列表
-const fetchModels = async (key) => {
-  // 如果当前编辑模型有原始API密钥，则使用它
-  const apiKey = editingModel.value.originalApiKey || editingModel.value.apiKey;
+/**
+ * 获取可用模型列表
+ * @param {string} mode 模式：'edit'或'new'
+ * @param {string} modelKey 当mode为edit时的模型key
+ */
+const fetchAvailableModels = async (mode, modelKey = null) => {
+  // 确定来源对象和目标数组
+  const source = mode === 'edit' ? editingModel.value : newModel.value;
+  const targetRef = mode === 'edit' ? availableModels : newModelAvailableModels;
   
-  if (!apiKey || !editingModel.value.baseURL) {
+  // 验证基本参数
+  if (!source.apiKey) {
     toast.error(t('modelManager.needApiKeyAndBaseUrl', '请先填写API地址和密钥'));
     return;
   }
   
+  if (!source.baseURL) {
+    toast.error(t('modelManager.needApiKeyAndBaseUrl', '请先填写API地址和密钥'));
+    return;
+  }
+  
+  // 准备配置
+  const config = {
+    baseURL: source.baseURL,
+    apiKey: source.apiKey,
+    provider: source.provider || 'custom',
+    useVercelProxy: source.useVercelProxy
+  };
+  
+  // 如果是新建模式，补充完整配置
+  if (mode === 'new') {
+    Object.assign(config, {
+      defaultModel: 'unknown',
+      models: ['unknown'],
+      name: 'Temporary',
+      enabled: true
+    });
+  }
+  
   isLoadingModels.value = true;
+  
   try {
-    // 先更新临时配置，以便获取模型列表
-    const tempConfig = {
-      baseURL: editingModel.value.baseURL,
-      apiKey: apiKey,  // 使用原始API密钥
-      provider: 'custom',
-      defaultModel: editingModel.value.defaultModel || 'unknown',
-      models: [editingModel.value.defaultModel || 'unknown'],
-      name: editingModel.value.name,
-      enabled: true,
-      useVercelProxy: editingModel.value.useVercelProxy
-    };
-    
-    // 先临时更新模型配置
-    const originalConfig = modelManager.getModel(key);
-    modelManager.updateModel(key, tempConfig);
-    
     // 获取模型列表
-    const llm = createLLMService(modelManager);
-    const models = await llm.fetchAvailableModels(key);
+    const models = await modelManager.fetchModelsListWithConfig(
+      mode === 'edit' ? modelKey : config, 
+      mode === 'edit' ? config : {}, 
+      createLLMService
+    );
     
     console.log('获取到模型列表:', models);
-    availableModels.value = models;
     
-    // 如果列表为空，显示提示
+    // 处理结果
     if (models.length === 0) {
       toast.warning(t('modelManager.noModelsFound', '未找到可用模型'));
-      // 添加一个默认选项
-      availableModels.value = [editingModel.value.defaultModel || 'default-model'];
+      targetRef.value = [source.defaultModel || 'default-model'];
     } else {
-      // 如果当前选择的模型不在列表中，默认选择第一个
-      if (!models.includes(editingModel.value.defaultModel)) {
-        editingModel.value.defaultModel = models[0];
+      targetRef.value = models;
+      
+      // 更新默认选中的模型
+      if (mode === 'edit' && !models.includes(source.defaultModel)) {
+        source.defaultModel = models[0];
+      } else if (mode === 'new') {
+        source.defaultModel = models[0];
       }
+      
       toast.success(t('modelManager.fetchModelsSuccess', {count: models.length}, `成功获取 ${models.length} 个模型`));
     }
   } catch (error) {
     console.error('获取模型列表失败:', error);
     toast.error(t('modelManager.fetchModelsFailed', {error: error.message}, `获取模型列表失败: ${error.message}`));
-    // 确保有一个默认选项
-    availableModels.value = [editingModel.value.defaultModel || 'default-model'];
+    
+    // 确保有默认选项
+    targetRef.value = [source.defaultModel || 'default-model'];
   } finally {
     isLoadingModels.value = false;
   }
 };
 
-// 获取新模型的可用模型列表
-const fetchNewModels = async () => {
-  if (!newModel.value.apiKey || !newModel.value.baseURL) {
-    toast.error(t('modelManager.needApiKeyAndBaseUrl', '请先填写API地址和密钥'));
-    return;
-  }
-  
-  isLoadingModels.value = true;
-  try {
-    // 创建临时模型配置
-    const tempKey = `temp-${Date.now()}`;
-    const tempConfig = {
-      baseURL: newModel.value.baseURL,
-      apiKey: newModel.value.apiKey,
-      provider: 'custom',
-      defaultModel: 'unknown',
-      models: ['unknown'],
-      name: 'Temporary',
-      enabled: true,
-      useVercelProxy: newModel.value.useVercelProxy
-    };
-    
-    // 临时添加模型配置
-    modelManager.addModel(tempKey, tempConfig);
-    
-    // 获取模型列表
-    const models = await modelManager.fetchModelsList(tempKey, createLLMService);
-    newModelAvailableModels.value = models;
-    
-    // 如果列表为空，显示提示
-    if (models.length === 0) {
-      toast.warning(t('modelManager.noModelsFound', '未找到可用模型'));
-      // 添加一个默认选项
-      newModelAvailableModels.value = ['default-model'];
-    } else {
-      // 默认选择第一个模型
-      newModel.value.defaultModel = models[0];
-      toast.success(t('modelManager.fetchModelsSuccess', {count: models.length}, `成功获取 ${models.length} 个模型`));
-    }
-    
-    // 删除临时模型配置
-    modelManager.deleteModel(tempKey);
-  } catch (error) {
-    console.error('获取模型列表失败:', error);
-    toast.error(t('modelManager.fetchModelsFailed', {error: error.message}, `获取模型列表失败: ${error.message}`));
-    // 确保有一个默认选项
-    newModelAvailableModels.value = ['default-model'];
-    
-    // 清理可能存在的临时模型
-    try {
-      const tempKey = `temp-${Date.now() - 1000}`;
-      if (modelManager.getModel(tempKey)) {
-        modelManager.deleteModel(tempKey);
-      }
-    } catch (e) {
-      // 忽略错误
-    }
-  } finally {
-    isLoadingModels.value = false;
-  }
-};
+// 保留原有函数的引用，但调用新的通用函数
+const fetchModels = (key) => fetchAvailableModels('edit', key);
+const fetchNewModels = () => fetchAvailableModels('new');
 
 // 重置状态
 const resetModelsList = () => {
@@ -673,5 +633,85 @@ onMounted(() => {
 .modal-leave-to {
   opacity: 0;
   transform: scale(0.95);
+}
+
+/* 统一Select组件样式 */
+:deep(.el-select) {
+  width: 100%;
+}
+
+/* 解决边框重叠问题 */
+:deep(.el-select .el-input__wrapper) {
+  border: none !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+  padding: 0 11px !important;
+}
+
+/* 自定义Select边框样式 */
+:deep(.el-themed-select.el-select) {
+  background-color: var(--bg-input, rgba(0, 0, 0, 0.1));
+  border: 1px solid var(--border-input, rgba(255, 255, 255, 0.1));
+  border-radius: 0.5rem;
+  transition: border-color 0.2s ease;
+  overflow: hidden;
+  min-height: 38px;
+  padding: 0;
+}
+
+:deep(.el-themed-select.el-select:hover) {
+  border-color: var(--border-input-focus, rgba(157, 78, 221, 0.5));
+}
+
+:deep(.el-themed-select.el-select:focus-within) {
+  border-color: var(--primary-color, #8a2be2);
+}
+
+/* 密码输入框图标颜色 */
+:deep(.el-input__suffix) {
+  color: var(--text-secondary, #aaa);
+}
+
+:deep(.el-input__suffix:hover) {
+  color: var(--text-highlight, #bf7af0);
+}
+
+/* 确保输入框文本颜色正确 */
+:deep(.el-input__inner) {
+  color: var(--text-normal, #fff);
+  height: auto;
+  line-height: inherit;
+  background-color: transparent;
+}
+
+/* 重置全局样式，避免冲突 */
+:global(.el-select-dropdown) {
+  background-color: var(--bg-dropdown, #2a2a2a) !important;
+  border: 1px solid var(--border-dropdown, rgba(255, 255, 255, 0.1)) !important;
+  border-radius: 0.5rem !important;
+}
+
+:global(.el-select-dropdown__item) {
+  color: var(--text-normal, #fff) !important;
+}
+
+:global(.el-select-dropdown__item:hover) {
+  background-color: var(--bg-hover, rgba(255, 255, 255, 0.1)) !important;
+}
+
+:global(.el-select-dropdown__item.selected) {
+  background-color: var(--bg-selected, rgba(138, 43, 226, 0.2)) !important;
+  color: var(--text-highlight, #bf7af0) !important;
+}
+
+/* 确保下拉菜单的创建新选项样式正确 */
+:global(.el-select-dropdown__item.is-created) {
+  color: var(--text-highlight, #bf7af0) !important;
+}
+
+:global(.el-select-dropdown__item.is-created::before) {
+  content: "新增: ";
+  color: var(--text-secondary, #aaa);
+  margin-right: 4px;
 }
 </style>

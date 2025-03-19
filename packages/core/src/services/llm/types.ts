@@ -1,3 +1,4 @@
+import { ModelConfig } from "../model/types";
 
 /**
  * 消息角色类型
@@ -48,4 +49,11 @@ export interface ILLMService {
    * 测试连接
    */
   testConnection(provider: string): Promise<void>;
+  
+  /**
+   * 获取可用模型列表
+   * @throws {RequestConfigError} 当参数无效时
+   * @throws {APIError} 当请求失败时
+   */
+  fetchAvailableModels(config: ModelConfig): Promise<string[]>;
 } 
